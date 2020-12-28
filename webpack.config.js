@@ -3,7 +3,8 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        main: './src/js/main.js'
+        main: './src/js/main.js',
+        remote: './src/js/remote.js'
     },
     output: {
         path: __dirname,
