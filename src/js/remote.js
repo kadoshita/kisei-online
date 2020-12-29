@@ -9,6 +9,7 @@ import '../css/remote.css';
     const videoDeviceList = document.getElementById('video-device-list');
     const connectButton = document.getElementById('connect-button');
     const soundOnlyButton = document.getElementById('sound-only-button');
+    const closeButton = document.getElementById('close-button');
     const signalingConnection = Ayame.connection('wss://ayame-labo.shiguredo.jp/signaling', process.env.AYAME_ROOM_NAME, {
         signalingKey: process.env.AYAME_SIGNALING_KEY,
         audio: {
@@ -99,5 +100,14 @@ import '../css/remote.css';
     connectButton.addEventListener('click', async () => {
         await signalingConnection.connect(localStream);
         connectButton.disabled = true;
+    });
+    closeButton.addEventListener('click', async () => {
+        await signalingConnection.disconnect();
+        if (localStream) {
+            localStream.getTracks().forEach(t => t.stop());
+            localStream = null;
+        }
+        remoteVideo.srcObject = null;
+        localVideo.srcObject = null;
     });
 })();
