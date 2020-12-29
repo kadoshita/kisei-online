@@ -10,6 +10,9 @@ import '../css/remote.css';
     const connectButton = document.getElementById('connect-button');
     const soundOnlyButton = document.getElementById('sound-only-button');
     const closeButton = document.getElementById('close-button');
+    const localSoundOnly = document.getElementById('local-sound-only');
+    const remoteSoundOnly = document.getElementById('remote-sound-only');
+
     const signalingConnection = Ayame.connection('wss://ayame-labo.shiguredo.jp/signaling', process.env.AYAME_ROOM_NAME, {
         signalingKey: process.env.AYAME_SIGNALING_KEY,
         audio: {
@@ -17,10 +20,38 @@ import '../css/remote.css';
         },
         video: {
             direction: 'sendrecv'
+        },
+        iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' }
+        ]
+    });
+    let dataChannelConnection = null;
+    signalingConnection.on('open', async () => {
+        console.log('open');
+        dataChannelConnection = await signalingConnection.createDataChannel('message');
+        if (dataChannelConnection) {
+            dataChannelConnection.onmessage = e => {
+                console.log(e.data);
+                const { type, value } = JSON.parse(e.data);
+                switch (type) {
+                    case 'sound_only_mode':
+                        console.log(value);
+                }
+            };
         }
     });
-    signalingConnection.on('connect', () => {
-        console.log('connect');
+    signalingConnection.on('datachannel', channel => {
+        if (!dataChannelConnection) {
+            dataChannelConnection = channel;
+            dataChannelConnection.onmessage = e => {
+                console.log(e.data);
+                const { type, value } = JSON.parse(e.data);
+                switch (type) {
+                    case 'sound_only_mode':
+                        console.log(value);
+                }
+            };
+        }
     });
     signalingConnection.on('addstream', e => {
         remoteVideo.srcObject = e.stream;
@@ -35,6 +66,7 @@ import '../css/remote.css';
     });
 
     let localStream = null;
+    let isSoundOnlyMode = false;
 
     const getVideoConstraints = (deviceId = '') => {
         if (deviceId === '') {
@@ -101,7 +133,34 @@ import '../css/remote.css';
         await signalingConnection.connect(localStream);
         connectButton.disabled = true;
     });
+    soundOnlyButton.addEventListener('click', async () => {
+        isSoundOnlyMode = !isSoundOnlyMode;
+        soundOnlyButton.innerText = isSoundOnlyMode ? '声と動画' : '声だけ';
+        dataChannelConnection.send(JSON.stringify({
+            type: 'sound_only_mode',
+            value: isSoundOnlyMode
+        }));
+        localStream.getVideoTracks().forEach(t => t.enabled = !isSoundOnlyMode);
+
+        setTimeout(() => {
+            const localVideoRect = localVideo.getBoundingClientRect();
+            localSoundOnly.style.top = `${(localVideo.offsetHeight / 2) - 10}px`;
+            localSoundOnly.style.width = `${localVideoRect.right}px`;
+            localSoundOnly.style.paddingLeft = `${localVideoRect.x}px`;
+
+            const remoteVideoRect = remoteVideo.getBoundingClientRect();
+            remoteSoundOnly.style.top = `${(remoteVideo.offsetHeight / 2) - 10}px`;
+            remoteSoundOnly.style.width = `${remoteVideoRect.right}px`;
+            remoteSoundOnly.style.paddingLeft = `${remoteVideoRect.x}px`;
+
+            localSoundOnly.style.display = isSoundOnlyMode ? 'block' : 'none';
+            remoteSoundOnly.style.display = isSoundOnlyMode ? 'block' : 'none';
+        }, 500);
+    });
     closeButton.addEventListener('click', async () => {
+        if (closeButton.innerText === 'もう一回') {
+            return location.reload();
+        }
         await signalingConnection.disconnect();
         if (localStream) {
             localStream.getTracks().forEach(t => t.stop());
@@ -109,5 +168,10 @@ import '../css/remote.css';
         }
         remoteVideo.srcObject = null;
         localVideo.srcObject = null;
+        localSoundOnly.style.display = 'none';
+        remoteSoundOnly.style.display = 'none';
+        closeButton.classList.remove('btn-danger');
+        closeButton.classList.add('btn-info');
+        closeButton.innerText = 'もう一回';
     });
 })();

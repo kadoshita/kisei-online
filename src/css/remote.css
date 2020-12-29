@@ -12,3 +12,11 @@ video {
 #local-video {
     width: 50%;
 }
+
+.sound-only-text {
+    display: none;
+    position: absolute;
+    left: 0px;
+    color: red;
+    text-align: center;
+}

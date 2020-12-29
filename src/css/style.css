@@ -8,3 +8,15 @@ video {
     width: 100%;
     height: auto;
 }
+#remote-video{
+    width: auto;
+    height: 100%;
+}
+
+.sound-only-text {
+    display: none;
+    position: absolute;
+    left: 0px;
+    color: red;
+    text-align: center;
+}
