@@ -3,3 +3,8 @@ html, body {
     background-color: #fafafa;
     margin: 0px;
 }
+
+video {
+    width: 100%;
+    height: auto;
+}

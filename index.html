@@ -4,11 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>title</title>
+    <title>kisei-online</title>
 </head>
 
 <body>
-
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <video id="remote-video" autoplay>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <video id="local-video" autoplay muted></video>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="video-device-list">カメラ選択</label>
+                            <select class="form-control" id="video-device-list">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="audio-input-device-list">マイク選択</label>
+                            <select class="form-control" id="audio-input-device-list">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="audio-output-device-list">スピーカー選択</label>
+                            <select class="form-control" id="audio-output-device-list">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <script src="dist/js/main.js"></script>
