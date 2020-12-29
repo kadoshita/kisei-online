@@ -16,12 +16,14 @@
   "license": "MIT",
   "devDependencies": {
     "css-loader": "^3.5.3",
+    "dotenv-webpack": "^6.0.0",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@open-ayame/ayame-web-sdk": "^2020.3.0",
     "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1"
