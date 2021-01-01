@@ -13,6 +13,15 @@ import '../css/remote.css';
     const localSoundOnly = document.getElementById('local-sound-only');
     const remoteSoundOnly = document.getElementById('remote-sound-only');
 
+    const dataChannelOnMessage = e => {
+        console.log(e.data);
+        const { type, value } = JSON.parse(e.data);
+        switch (type) {
+            case 'sound_only_mode':
+                console.log(value);
+        }
+    };
+
     const signalingConnection = Ayame.connection('wss://ayame-labo.shiguredo.jp/signaling', process.env.AYAME_ROOM_NAME, {
         signalingKey: process.env.AYAME_SIGNALING_KEY,
         audio: {
@@ -30,39 +39,27 @@ import '../css/remote.css';
         console.log('open');
         dataChannelConnection = await signalingConnection.createDataChannel('message');
         if (dataChannelConnection) {
-            dataChannelConnection.onmessage = e => {
-                console.log(e.data);
-                const { type, value } = JSON.parse(e.data);
-                switch (type) {
-                    case 'sound_only_mode':
-                        console.log(value);
-                }
-            };
+            dataChannelConnection.onmessage = dataChannelOnMessage;
         }
     });
     signalingConnection.on('datachannel', channel => {
         if (!dataChannelConnection) {
             dataChannelConnection = channel;
-            dataChannelConnection.onmessage = e => {
-                console.log(e.data);
-                const { type, value } = JSON.parse(e.data);
-                switch (type) {
-                    case 'sound_only_mode':
-                        console.log(value);
-                }
-            };
+            dataChannelConnection.onmessage = dataChannelOnMessage;
         }
     });
     signalingConnection.on('addstream', e => {
         remoteVideo.srcObject = e.stream;
+        soundOnlyButton.disabled = false;
     });
     signalingConnection.on('removestream', e => {
         console.log(e);
         remoteVideo.srcObject = null;
     });
-    signalingConnection.on('disconnect', e => {
+    signalingConnection.on('disconnect', async e => {
         console.log(e);
         remoteVideo.srcObject = null;
+        await signalingConnection.disconnect();
     });
 
     let localStream = null;
@@ -114,6 +111,7 @@ import '../css/remote.css';
         audio: true
     });
     localVideo.srcObject = localStream;
+    connectButton.disabled = false;
     const deviceList = await navigator.mediaDevices.enumerateDevices();
 
     deviceList.filter(d => d.kind === 'videoinput').forEach(d => {
@@ -132,6 +130,7 @@ import '../css/remote.css';
     connectButton.addEventListener('click', async () => {
         await signalingConnection.connect(localStream);
         connectButton.disabled = true;
+        videoDeviceList.disabled = true;
     });
     soundOnlyButton.addEventListener('click', async () => {
         isSoundOnlyMode = !isSoundOnlyMode;

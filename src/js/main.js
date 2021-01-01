@@ -12,6 +12,11 @@ import '../css/style.css';
     const audioOutputDeviceList = document.getElementById('audio-output-device-list');
     const localSoundOnly = document.getElementById('local-sound-only');
     const remoteSoundOnly = document.getElementById('remote-sound-only');
+    const connectionWaitAlert = document.getElementById('connection-wait-alert');
+    const connectingAlert = document.getElementById('connecting-alert');
+    connectingAlert.style.display = 'none';
+    const disconnectedAlert = document.getElementById('disconnected-alert');
+    disconnectedAlert.style.display = 'none';
     const deviceSetting = {
         videoDeviceId: '',
         audioInputDeviceId: '',
@@ -54,10 +59,15 @@ import '../css/style.css';
         iceServers: [
             { urls: 'stun:stun.l.google.com:19302' }
         ]
-    });
+    }, true);
     let dataChannelConnection = null;
     signalingConnection.on('open', async () => {
         console.log('open');
+        connectionWaitAlert.style.display = 'none';
+        connectingAlert.style.display = 'block';
+        disconnectedAlert.style.display = 'none';
+        videoDeviceList.disabled = true;
+        audioInputDeviceList.disabled = true;
         dataChannelConnection = await signalingConnection.createDataChannel('message');
         if (dataChannelConnection) {
             dataChannelConnection.onmessage = dataChannelOnMessage;
@@ -81,6 +91,10 @@ import '../css/style.css';
         remoteVideo.srcObject = null;
         localSoundOnly.style.display = 'none';
         remoteSoundOnly.style.display = 'none';
+        connectingAlert.style.display = 'none';
+        disconnectedAlert.style.display = 'block';
+        videoDeviceList.disabled = false;
+        audioInputDeviceList.disabled = false;
     });
 
     const getVideoConstraints = (deviceId = '') => {

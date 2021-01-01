@@ -19,6 +19,19 @@
             <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="alert alert-secondary" role="alert" id="connection-wait-alert">
+                            <p>接続待機中</p>
+                        </div>
+                        <div class="alert alert-success" role="alert" id="connecting-alert">
+                            <p>接続中</p>
+                        </div>
+                        <div class="alert alert-danger" role="alert" id="disconnected-alert">
+                            <p>切断済み</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <video id="local-video" autoplay muted></video>
                         <div id="local-sound-only" class="sound-only-text">
                             <p>Sound Only</p>
