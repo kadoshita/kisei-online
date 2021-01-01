@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kisei-online</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <video id="remote-video" autoplay></video>
+                <div id="remote-sound-only" class="sound-only-text">
+                    <p>Sound Only</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-secondary" role="alert" id="connection-wait-alert">
+                            <p>接続待機中</p>
+                        </div>
+                        <div class="alert alert-success" role="alert" id="connecting-alert">
+                            <p>接続中</p>
+                        </div>
+                        <div class="alert alert-danger" role="alert" id="disconnected-alert">
+                            <p>切断済み</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <video id="local-video" autoplay muted></video>
+                        <div id="local-sound-only" class="sound-only-text">
+                            <p>Sound Only</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="connect-button" class="btn btn-primary btn-lg btn-block" type="button">接続</button>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="video-device-list">カメラ選択</label>
+                            <select class="form-control" id="video-device-list">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="audio-input-device-list">マイク選択</label>
+                            <select class="form-control" id="audio-input-device-list">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="audio-output-device-list">スピーカー選択</label>
+                            <select class="form-control" id="audio-output-device-list">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="dist/js/main.js"></script>
+
+</html>
