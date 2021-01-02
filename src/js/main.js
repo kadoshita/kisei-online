@@ -13,6 +13,8 @@ import '../css/style.css';
     const audioOutputDeviceList = document.getElementById('audio-output-device-list');
     const localSoundOnly = document.getElementById('local-sound-only');
     const remoteSoundOnly = document.getElementById('remote-sound-only');
+    const roomUrlAlert = document.getElementById('room-url-alert');
+    roomUrlAlert.style.display = 'none';
     const connectionWaitAlert = document.getElementById('connection-wait-alert');
     const connectingAlert = document.getElementById('connecting-alert');
     connectingAlert.style.display = 'none';
@@ -60,6 +62,26 @@ import '../css/style.css';
             }
         }
     });
+    history.replaceState('', '', `${location.origin}?room=${roomName}`);
+    const roomUrl = document.createElement('a');
+    roomUrl.href = '#';
+    roomUrl.innerText = `${location.origin}/remote.html?room=${roomName}`;
+    roomUrl.addEventListener('click', e => {
+        const hiddenInputText = document.createElement('input');
+        hiddenInputText.value = `${location.origin}/remote.html?room=${roomName}`;
+        roomUrlAlert.appendChild(hiddenInputText);
+        hiddenInputText.select();
+        document.execCommand('copy');
+        roomUrlAlert.removeChild(hiddenInputText);
+        Swal.fire({
+            title: 'URLをコピーしました',
+            timer: 1500,
+            showConfirmButton: false
+        });
+    });
+    roomUrlAlert.appendChild(roomUrl);
+    roomUrlAlert.style.display = 'block';
+
     const signalingConnection = Ayame.connection('wss://ayame-labo.shiguredo.jp/signaling', `${process.env.AYAME_ROOM_NAME}-${roomName}`, {
         signalingKey: process.env.AYAME_SIGNALING_KEY,
         audio: {
