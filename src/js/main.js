@@ -62,13 +62,13 @@ import '../css/style.css';
             }
         }
     });
-    history.replaceState('', '', `${location.origin}?room=${roomName}`);
+    history.replaceState('', '', `${location.origin}/kisei-online?room=${roomName}`);
     const roomUrl = document.createElement('a');
     roomUrl.href = '#';
-    roomUrl.innerText = `${location.origin}/remote.html?room=${roomName}`;
+    roomUrl.innerText = `${location.origin}/kisei-online/remote.html?room=${roomName}`;
     roomUrl.addEventListener('click', e => {
         const hiddenInputText = document.createElement('input');
-        hiddenInputText.value = `${location.origin}/remote.html?room=${roomName}`;
+        hiddenInputText.value = `${location.origin}/kisei-online/remote.html?room=${roomName}`;
         roomUrlAlert.appendChild(hiddenInputText);
         hiddenInputText.select();
         document.execCommand('copy');
