@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import * as Ayame from '@open-ayame/ayame-web-sdk';
+import Swal from 'sweetalert2';
 import '../css/style.css';
 
 (async () => {
@@ -48,7 +49,18 @@ import '../css/style.css';
             }
         }
     }
-    const signalingConnection = Ayame.connection('wss://ayame-labo.shiguredo.jp/signaling', process.env.AYAME_ROOM_NAME, {
+    const { value: roomName } = await Swal.fire({
+        title: 'ルーム名を入力してください',
+        input: 'text',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        inputValidator: value => {
+            if (!value) {
+                return 'ルーム名を入力してください'
+            }
+        }
+    });
+    const signalingConnection = Ayame.connection('wss://ayame-labo.shiguredo.jp/signaling', `${process.env.AYAME_ROOM_NAME}-${roomName}`, {
         signalingKey: process.env.AYAME_SIGNALING_KEY,
         audio: {
             direction: 'sendrecv'

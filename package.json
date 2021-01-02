@@ -26,6 +26,7 @@
     "@open-ayame/ayame-web-sdk": "^2020.3.0",
     "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",
-    "popper.js": "^1.16.1"
+    "popper.js": "^1.16.1",
+    "sweetalert2": "^10.12.7"
   }
 }
