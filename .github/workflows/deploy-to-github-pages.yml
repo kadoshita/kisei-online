@@ -14,12 +14,13 @@ jobs:
         node-version: 14.x
     - name: Install and Build
       env:
-        AYAME_SIGNALING_KEY: ${{ secrets.AYAME_SIGNALING_KEY }} 
+        AYAME_SIGNALING_KEY: ${{ secrets.AYAME_SIGNALING_KEY }}
         AYAME_ROOM_NAME: ${{ secrets.AYAME_ROOM_NAME }}
       run: |
         yarn install
         yarn build
         mkdir build
+        cp ./*.png ./build/
         cp ./*.html ./build/
         mv dist/ ./build/
     - name: Deploy
