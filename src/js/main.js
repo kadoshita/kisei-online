@@ -129,6 +129,10 @@ import '../css/style.css';
         disconnectedAlert.style.display = 'block';
         videoDeviceList.disabled = false;
         audioInputDeviceList.disabled = false;
+        Swal.fire({
+            title: '切断されました',
+            icon: 'info'
+        });
     });
 
     const getVideoConstraints = (deviceId = '') => {

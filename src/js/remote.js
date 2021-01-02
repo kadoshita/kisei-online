@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import * as Ayame from '@open-ayame/ayame-web-sdk';
+import Swal from 'sweetalert2';
 import '../css/remote.css';
 
 (async () => {
@@ -21,8 +22,27 @@ import '../css/remote.css';
                 console.log(value);
         }
     };
+    const getParam = () => {
+        let param = [];
+        location.search.replace('?', '').split('&').forEach(s => {
+            const k = s.split('=')[0];
+            const v = s.split('=')[1];
+            param[k] = v;
+        });
+        return param;
+    };
+    const param = getParam();
+    if (!param.room || param.room === '') {
+        Swal.fire({
+            title: 'ERROR',
+            text: 'ルーム名が入力されていません',
+            icon: 'error'
+        }).finally(() => {
+            location.href = `${location.origin}`;
+        });
+    }
 
-    const signalingConnection = Ayame.connection('wss://ayame-labo.shiguredo.jp/signaling', process.env.AYAME_ROOM_NAME, {
+    const signalingConnection = Ayame.connection('wss://ayame-labo.shiguredo.jp/signaling', `${process.env.AYAME_ROOM_NAME}-${param.room}`, {
         signalingKey: process.env.AYAME_SIGNALING_KEY,
         audio: {
             direction: 'sendrecv'
@@ -60,6 +80,10 @@ import '../css/remote.css';
         console.log(e);
         remoteVideo.srcObject = null;
         await signalingConnection.disconnect();
+        Swal.fire({
+            title: '切断されました',
+            icon: 'info'
+        });
     });
 
     let localStream = null;
