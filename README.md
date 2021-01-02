@@ -2,9 +2,11 @@
 
 [![Deploy to GitHub Pages](https://github.com/kadoshita/kisei-online/workflows/Deploy%20to%20GitHub%20Pages/badge.svg)](https://sublimer.me/kisei-online/)
 
-<div style="text-align:center;">
-<img src="logo.png" width=400>
-</div>
+<p align="center">
+  <a href="https://sublimer.me/kisei-online/">
+    <img src="logo.png" width=400>
+  </a>
+</p>
 
 手軽に使える，オンライン帰省用ビデオ通話ツール
 
