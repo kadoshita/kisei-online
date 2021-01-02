@@ -20,6 +20,7 @@ jobs:
         yarn install
         yarn build
         mkdir build
+        cp ./favicon.ico ./build/
         cp ./*.png ./build/
         cp ./*.html ./build/
         mv dist/ ./build/
